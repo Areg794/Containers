@@ -13,27 +13,55 @@ public:
     }
 };
 
-void inOrderTraversal(TreeNode* node) {
-    if (node == nullptr) {
-        return;
+class BinaryTree {
+public:
+    TreeNode* root;
+
+    BinaryTree() {
+        root = nullptr;
     }
-    inOrderTraversal(node->left);
-    std::cout << node->data << " ";
-    inOrderTraversal(node->right);
-}
+
+    void insert(int value) {
+        root = insertRec(root, value);
+    }
+
+    TreeNode* insertRec(TreeNode* root, int value) {
+        if (root == nullptr) {
+            return new TreeNode(value);
+        }
+
+        if (value < root->data) {
+            root->left = insertRec(root->left, value);
+        } else if (value > root->data) {
+            root->right = insertRec(root->right, value);
+        }
+
+        return root;
+    }
+
+    void inOrderTraversal(TreeNode* node) {
+        if (node == nullptr) {
+            return;
+        }
+        inOrderTraversal(node->left);
+        std::cout << node->data << " ";
+        inOrderTraversal(node->right);
+    }
+};
 
 int main() {
-    TreeNode* root = new TreeNode(10);
-    root->left = new TreeNode(5);
-    root->right = new TreeNode(15);
-    root->left->left = new TreeNode(3);
-    root->left->right = new TreeNode(7);
-    root->right->left = new TreeNode(12);
-    root->right->right = new TreeNode(18);
+    BinaryTree tree;
 
+    tree.insert(10);
+    tree.insert(5);
+    tree.insert(15);
+    tree.insert(3);
+    tree.insert(7);
+    tree.insert(12);
+    tree.insert(18);
 
     std::cout << "In-order traversal: ";
-    inOrderTraversal(root);
+    tree.inOrderTraversal(tree.root);
     std::cout << std::endl;
 
     return 0;
