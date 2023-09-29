@@ -1,56 +1,37 @@
 #include <iostream>
+#include <list>
 
 template <typename T>
 class Queue {
 private:
-    struct Node {
-        T data;
-        Node* next;
-
-        Node(const T& value) : data(value), next(nullptr) {}
-    };
-
-    Node* frontNode;
-    Node* rearNode;
+    std::list<T> elements;
 
 public:
-    Queue() : frontNode(nullptr), rearNode(nullptr) {}
-
-    ~Queue() {
-        while (!isEmpty()) {
-            dequeue();
-        }
-    }
-
-    void enqueue(const T& value) {
-        Node* newNode = new Node(value);
-        if (isEmpty()) {
-            frontNode = newNode;
-            rearNode = newNode;
-        }
-        else {
-            rearNode->next = newNode;
-            rearNode = newNode;
-        }
+    void enqueue(const T& element) {
+        elements.push_back(element);
     }
 
     void dequeue() {
-        if (!isEmpty()) {
-            Node* temp = frontNode;
-            frontNode = frontNode->next;
-            delete temp;
+        if (!empty()) {
+            elements.pop_front();
         }
     }
+
 
     T front() const {
-        if (!isEmpty()) {
-            return frontNode->data;
+        if (!empty()) {
+            return elements.front();
         }
-        throw std::out_of_range("Queue is empty");
+        throw std::runtime_error("Queue is empty");
     }
 
-    bool isEmpty() const {
-        return frontNode == nullptr;
+    bool empty() const {
+        return elements.empty();
+    }
+
+    // Get the size of the queue
+    size_t size() const {
+        return elements.size();
     }
 };
 
@@ -62,9 +43,7 @@ int main() {
     myQueue.enqueue(30);
 
     std::cout << "Front element: " << myQueue.front() << std::endl;
-
     myQueue.dequeue();
-
     std::cout << "Front element after dequeue: " << myQueue.front() << std::endl;
 
     return 0;
